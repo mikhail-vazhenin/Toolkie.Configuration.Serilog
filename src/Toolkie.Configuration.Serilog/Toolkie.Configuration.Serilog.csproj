@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <Authors>Mikhail Vazhenin</Authors>
-    <PackageTags>serilog;filter;controller;action</PackageTags>
+    <PackageTags>Toolkie;serilog;filter;controller;action</PackageTags>
     <Description>Extensions for Serilog configuration</Description>
     <Version>1.0.0</Version>
     <RepositoryUrl>https://github.com/mikhail-vazhenin/Toolkie.Configuration.Serilog</RepositoryUrl>
