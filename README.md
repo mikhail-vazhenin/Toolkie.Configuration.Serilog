@@ -8,10 +8,10 @@ Code was borrowed from [Andrew Lock](https://andrewlock.net/using-serilog-aspnet
 
 #### Usage
 ```c#
-    services.AddControllers(opts =>
-    {
-        opts.Filters.Add<SerilogLoggingActionFilter>();
-    });
+services.AddControllers(opts =>
+{
+   opts.Filters.Add<SerilogLoggingActionFilter>();
+});
 ```
 
 #### Result
