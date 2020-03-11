@@ -6,10 +6,10 @@ using Serilog;
 
 namespace Toolkie.Configuration.Serilog.Filters
 {
-    public class SerilogLoggingActionFilter : IActionFilter
+    public class ActionNameLoggingFilter : IActionFilter
     {
         private readonly IDiagnosticContext _diagnosticContext;
-        public SerilogLoggingActionFilter(IDiagnosticContext diagnosticContext)
+        public ActionNameLoggingFilter(IDiagnosticContext diagnosticContext)
         {
             _diagnosticContext = diagnosticContext;
         }
