@@ -16,10 +16,11 @@ namespace Toolkie.Configuration.Serilog.Filters
 
         public void OnActionExecuting(ActionExecutingContext context)
         {
-            _diagnosticContext.Set("RouteData", context.ActionDescriptor.RouteValues);
+            foreach (var r in context.ActionDescriptor.RouteValues)
+            {
+                _diagnosticContext.Set(r.Key, r.Value);
+            }
             _diagnosticContext.Set("ActionName", context.ActionDescriptor.DisplayName);
-            _diagnosticContext.Set("ActionId", context.ActionDescriptor.Id);
-            _diagnosticContext.Set("ValidationState", context.ModelState.IsValid);
         }
 
         // Required by the interface
