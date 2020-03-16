@@ -4,7 +4,7 @@ using System.Text;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Serilog;
 
-namespace Toolkie.Configuration.Serilog.Filters
+namespace Toolkie.Configuration.Serilog.ActionFilters
 {
     public class ActionNameLoggingFilter : IActionFilter
     {

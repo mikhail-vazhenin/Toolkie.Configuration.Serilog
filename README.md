@@ -26,7 +26,7 @@ Please, keep the order
 
 Added property `RequestBody` to context
 
-## Filters
+## ActionFilters
 
 ### ActionNameLoggingFilter
 
@@ -46,3 +46,21 @@ services.AddControllers(opts =>
 #### Result
 
 Added properties to context `RouteData`, `ActionName`, `ActionId`, `ValidationState`
+
+## DelegatingHandlers
+
+### RequestLoggingHandler
+
+RequestLoggingHandler add `HttpClient` requests logging like an UseSerilogRequestLogging format.
+
+#### Usage 
+
+```c#
+  services.AddHttpClientRequestLogging();
+```
+
+Or you can use `RequestLoggingHandler` in `HttpClient` constructor
+
+#### Result
+
+Added logs for `HttpClient` requests
