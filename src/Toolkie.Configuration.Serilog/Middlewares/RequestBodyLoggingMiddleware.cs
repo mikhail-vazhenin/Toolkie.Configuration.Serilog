@@ -30,8 +30,7 @@ namespace Toolkie.Configuration.Serilog.Middlewares
 
             await _next(httpContext);
 
-            if (_options.Mode == RequestBodyLoggingMode.All ||
-                (_options.Mode == RequestBodyLoggingMode.ExceptionsOnly && httpContext?.Response?.StatusCode > 499))
+            if (CheckStatusCodeAndOptions(_options.Mode, httpContext?.Response?.StatusCode))
             {
                 _diagnosticContext.Set("RequestBody", requestBody);
             }
@@ -53,5 +52,22 @@ namespace Toolkie.Configuration.Serilog.Middlewares
             return body;
         }
 
+        private bool CheckStatusCodeAndOptions(RequestBodyLoggingMode mode, int? statusCode)
+        {
+            if (!statusCode.HasValue) return false;
+
+            if ((mode & RequestBodyLoggingMode.Only1xx) != 0)
+                return statusCode >= 100 && statusCode <= 199;
+            if ((mode & RequestBodyLoggingMode.Only2xx) != 0)
+                return statusCode >= 200 && statusCode <= 299;
+            if ((mode & RequestBodyLoggingMode.Only3xx) != 0)
+                return statusCode >= 300 && statusCode <= 399;
+            if ((mode & RequestBodyLoggingMode.Only4xx) != 0)
+                return statusCode >= 400 && statusCode <= 499;
+            if ((mode & RequestBodyLoggingMode.Only5xx) != 0)
+                return statusCode >= 500 && statusCode <= 599;
+
+            return false;
+        }
     }
 }
