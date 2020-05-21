@@ -19,7 +19,7 @@ Please, keep the order
 
 ```c#
   app.UseSerilogRequestLogging();
-  app.UseRequestBodyLogging(c=>c.Mode = RequestBodyLoggingMode.ExceptionsOnly);
+  app.UseRequestBodyLogging(c=>c.Mode = RequestBodyLoggingMode.Only4xx | RequestBodyLoggingMode.Only5xx);
 ```
 
 #### Result
