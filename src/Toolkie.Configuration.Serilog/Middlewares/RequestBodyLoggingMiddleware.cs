@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -56,18 +57,11 @@ namespace Toolkie.Configuration.Serilog.Middlewares
         {
             if (!statusCode.HasValue) return false;
 
-            if ((mode & RequestBodyLoggingMode.Only1xx) != 0)
-                return statusCode >= 100 && statusCode <= 199;
-            if ((mode & RequestBodyLoggingMode.Only2xx) != 0)
-                return statusCode >= 200 && statusCode <= 299;
-            if ((mode & RequestBodyLoggingMode.Only3xx) != 0)
-                return statusCode >= 300 && statusCode <= 399;
-            if ((mode & RequestBodyLoggingMode.Only4xx) != 0)
-                return statusCode >= 400 && statusCode <= 499;
-            if ((mode & RequestBodyLoggingMode.Only5xx) != 0)
-                return statusCode >= 500 && statusCode <= 599;
-
-            return false;
+            return ((mode & RequestBodyLoggingMode.Only1xx) != 0 && statusCode >= 100 && statusCode <= 199) ||
+                ((mode & RequestBodyLoggingMode.Only2xx) != 0 && statusCode >= 200 && statusCode <= 299) ||
+                ((mode & RequestBodyLoggingMode.Only3xx) != 0 && statusCode >= 300 && statusCode <= 399) ||
+                ((mode & RequestBodyLoggingMode.Only4xx) != 0 && statusCode >= 400 && statusCode <= 499) ||
+                ((mode & RequestBodyLoggingMode.Only5xx) != 0 && statusCode >= 500 && statusCode <= 599);
         }
     }
 }
