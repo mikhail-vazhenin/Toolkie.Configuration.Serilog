@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Serilog;
 using Serilog.Events;
 using Serilog.Extensions.Hosting;
@@ -17,7 +14,7 @@ namespace Toolkie.Configuration.Serilog.DelegatingHandlers
 {
     public class RequestLoggingHandler : DelegatingHandler
     {
-        static readonly LogEventLevel LogEventLevel = LogEventLevel.Information;
+        private const LogEventLevel LogLevelDefault = LogEventLevel.Information;
         private static readonly LogEventProperty[] NoProperties = new LogEventProperty[0];
         private const string DefaultRequestCompletionMessageTemplate =
             "HTTP {RequestMethod} {RequestPath} responded {StatusCode} in {Elapsed:0.0000} ms";
@@ -39,20 +36,19 @@ namespace Toolkie.Configuration.Serilog.DelegatingHandlers
 
             using (var collector = _diagnosticContext.BeginCollection())
             {
-                var response = await base.SendAsync(request, cancellationToken);
+                var response = await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
 
                 LogCompletion(request, collector, response.StatusCode, stopwatch.ElapsedTicks);
 
                 return response;
             }
-
         }
 
-        bool LogCompletion(HttpRequestMessage request, DiagnosticContextCollector collector, HttpStatusCode statusCode, long elapsedTicks)
+        private bool LogCompletion(HttpRequestMessage request, DiagnosticContextCollector collector, HttpStatusCode statusCode, long elapsedTicks)
         {
             var logger = Log.ForContext<RequestLoggingHandler>();
 
-            if (!logger.IsEnabled(LogEventLevel)) return false;
+            if (!logger.IsEnabled(LogLevelDefault)) return false;
 
             if (!collector.TryComplete(out var collectedProperties))
                 collectedProperties = NoProperties;
@@ -72,7 +68,7 @@ namespace Toolkie.Configuration.Serilog.DelegatingHandlers
 
             var messageTemplate = new MessageTemplateParser().Parse(DefaultRequestCompletionMessageTemplate);
 
-            var evt = new LogEvent(DateTimeOffset.Now, LogEventLevel, null, messageTemplate, properties);
+            var evt = new LogEvent(DateTimeOffset.Now, LogLevelDefault, null, messageTemplate, properties);
             logger.Write(evt);
 
             return false;

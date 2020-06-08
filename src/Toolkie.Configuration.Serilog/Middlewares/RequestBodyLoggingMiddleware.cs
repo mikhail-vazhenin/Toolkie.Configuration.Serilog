@@ -27,9 +27,9 @@ namespace Toolkie.Configuration.Serilog.Middlewares
 
         public async Task InvokeAsync(HttpContext httpContext)
         {
-            string requestBody = await GetRequestBody(httpContext.Request);
+            string requestBody = await GetRequestBody(httpContext.Request).ConfigureAwait(false);
 
-            await _next(httpContext);
+            await _next(httpContext).ConfigureAwait(false);
 
             if (CheckStatusCodeAndOptions(_options.Mode, httpContext?.Response?.StatusCode))
             {
@@ -43,7 +43,7 @@ namespace Toolkie.Configuration.Serilog.Middlewares
             try
             {
                 request.EnableBuffering();
-                var reader = await request.BodyReader.ReadAsync();
+                var reader = await request.BodyReader.ReadAsync().ConfigureAwait(false);
                 request.Body.Position = 0;
                 var buffer = reader.Buffer;
                 body = Encoding.UTF8.GetString(buffer.FirstSpan);
